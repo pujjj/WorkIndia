@@ -5,6 +5,7 @@ const User = require("./models/User");
 const Admin = require("./models/Admin");
 const CreateMatch = require("./models/CreateMatch");
 const MatchSchedule = require("./models/MatchSchedules");
+const Player = require("./models/TeamMember");
 
 const crypto = require("crypto");
 
@@ -52,21 +53,12 @@ app.get("/signup", (req, res) => {
   res.sendFile("pages/signup.html", { root: __dirname });
 });
 
-// app.get("/addnote", (req, res) => {
-//   res.sendFile("pages/index.html", { root: __dirname });
-// });
-
-app.get("/matchschedule", async (req, res) => {
-  try {
-    const matchSchedules = await MatchSchedule.find();
-    res.json({ success: true, matches: matchSchedules });
-  } catch (error) {
-    console.error("Error fetching match schedules:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to fetch match schedules." });
-  }
+app.get("/matchschedules", (req, res) => {
   res.sendFile("pages/index.html", { root: __dirname });
+});
+
+app.get("/addplayer", (req, res) => {
+  res.sendFile("pages/addplayer.html", { root: __dirname });
 });
 
 // Endpoints for APIs
@@ -194,80 +186,44 @@ app.post("/login", async (req, res) => {
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
 
-app.post("/getnotes", async (req, res) => {
-  const { userToken } = req.body;
-
-  let notes = await Note.find({ email: req.body.email }); //Getting notes for that email
-  res.status(200).json({ success: true, notes });
-});
-
+// Match Schedules
 app.post("/matchschedules", async (req, res) => {
-  const { userToken } = req.body;
+  try {
+    // Assuming you have a "MatchSchedule" model
+    const matchSchedules = await MatchSchedule.find().select(
+      "team1 team2 venue date"
+    ); // Fetch specific fields
 
-  let match = await Note.find({ email: req.body.email }); //Getting notes for that email
-  res.status(200).json({ success: true, notes });
+    res.status(200).json({ success: true, matchSchedules });
+  } catch (error) {
+    console.error("Error fetching match schedules:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching match schedules." });
+  }
 });
 
-// To add a note
-app.post("/addnote", async (req, res) => {
-  //   const { userToken } = req.body;
-  let note = await MatchSchedule.create(req.body);
-  res.status(200).json({ success: true, note });
+// Add players to Database
+app.post("/addplayer", async (req, res) => {
+  const { teamname, name, role } = req.body;
+
+  try {
+    const newPlayer = new Player({
+      teamname: teamname,
+      name: name,
+      role: role,
+    });
+
+    await newPlayer.save(); // Save the new player to the database
+
+    res.status(200).json({ success: true, player: newPlayer });
+  } catch (error) {
+    console.error("Error during player creation:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Player creation failed." });
+  }
 });
-
-// app.post("/deletenote", async (req, res) => {
-//   const { email, title } = req.body;
-
-//   try {
-//     // Assuming you have a Note model with an 'email' field
-//     // and you want to delete a note based on the email and title
-//     const deletedNote = await Note.findOneAndDelete({ email, title });
-
-//     if (deletedNote) {
-//       res
-//         .status(200)
-//         .json({ success: true, message: "Note deleted successfully" });
-//     } else {
-//       res.status(404).json({ success: false, message: "Note not found" });
-//     }
-//   } catch (error) {
-//     console.error("Error during note deletion:", error);
-//     res.status(500).json({ success: false, message: "Note deletion failed." });
-//   }
-// });
-
-// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
-
-// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
-
-// Login - POST
-// app.post("/login", async (req, res) => {
-//   let user = await User.findOne(req.body); //Checking database to see if the user exists
-//   console.log(user);
-//   if (!user) {
-//     res
-//       .status(200)
-//       .json({ success: false, message: "No user found. Please Sign Up!!" });
-//   } else {
-//     // console.log("User email:", user.get("email"));
-//     res.status(200).json({
-//       success: true,
-//       user: { email: user.email },
-//       message: "User Found",
-//     });
-//   }
-// });
-
-// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
-
-// Sign up - POST
-// app.post("/signup", async (req, res) => {
-//   const { userToken } = req.body;
-//   console.log(req.body);
-//   let user = await User.create(req.body); //Await - Waiting for user to be created
-//   //   res.sendFile("pages/signup.html", { root: __dirname });
-//   res.status(200).json({ success: true, user: user });
-// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);

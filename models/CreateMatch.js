@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 // Define the schema for a match
 const matchSchema = new mongoose.Schema({
-  team_1: String,
-  team_2: String,
+  team1: String,
+  team2: String,
   date: String,
   venue: String,
 });
@@ -14,8 +14,8 @@ module.exports = mongoose.model("CreateMatch", matchSchema);
 const Match = mongoose.model("CreateMatch", matchSchema);
 // Request data from your example
 const requestData = {
-  team_1: "India",
-  team_2: "Australia",
+  team1: "India",
+  team2: "Australia",
   date: "2023-07-12",
   venue: "Sydney Cricket Ground",
 };

@@ -41,13 +41,7 @@
                 </li>
               </ul>
               <div class="d-flex" role="search">
-                <!-- <input
-                  class="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                /> -->
-                <!-- Login and SignUp buttons -->
+  
                 <a href="/registeradmin"><button class="btn btn-outline-success mx-2" type="submit">Admin Register</button></a>
                 <a href="/login"><button class="btn btn-outline-success mx-2" type="submit">Login</button></a>
                 <a href="/signup"><button class="btn btn-outline-success mx-2" type="submit">SignUp</button></a>
@@ -84,6 +78,8 @@
         <!-- Submit Button -->
         <button id = "submit" type="submit" class="btn btn-primary">Submit</button>
         <button id = "matchschedule" type="matchschedule" class="btn btn-primary">Match Schedules</button>
+        <a href="/addplayer"><button id = "teammember" type="teammember" class="btn btn-primary">Add player to Squad</button></a>
+
     </div>
 
 
@@ -135,67 +131,6 @@ async function postData(url = "", data = {}) {
   return rdata;
 }
 
-// // Modify the deleteNote function
-// async function deleteNote(title) {
-//   let email = JSON.parse(localStorage.getItem("user"))?.email;
-//   // Ask for user confirmation
-//   const confirmDelete = window.confirm("Are you sure you want to delete this note?");
-
-//   if (!confirmDelete) {
-//     return;
-//   }
-
-//   const resp = await postData("/deletenote", { email, title });
-
-//   if (resp.success) {
-//     alert("Note Deleted!");
-//     // Optionally, you can refresh the notes list or perform any other necessary actions.
-//   } else {
-//     alert("Note deletion failed.");
-//   }
-// }
-
-
-
-// Fetch Match 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const matchScheduleButton = document.getElementById("matchschedule");
-//   const noteContainer = document.querySelector(".mynotes");
-
-//   matchScheduleButton.addEventListener("click", function () {
-//     // Fetch data from your server's endpoint
-//     fetch("/matchschedule")
-//       .then((response) => response.json())
-//       .then((data) => {
-//         if (data.success) {
-//           const matchData = data.matches;
-
-//           // Clear previous notes if any
-//           noteContainer.innerHTML = "";
-
-//           // Iterate through the match data and create HTML elements
-//           matchData.forEach((element) => {
-//             let note = `
-//               <div class="card mx-2" style="width: 18rem;">
-//                 <div class="card-body">
-//                   <h5 class="card-title">Team 1: ${element.team_1}</h5>
-//                   <h5 class="card-title">Team 2: ${element.team_2}</h5>
-//                   <h5 class="card-title">Date: ${element.date}</h5>
-//                   <h5 class="card-title">Venue: ${element.venue}</h5>
-//                 </div>
-//               </div>`;
-//             noteContainer.innerHTML += note;
-//           });
-//         } else {
-//           alert("Failed to fetch match schedules.");
-//         }
-//       })
-//       .catch((error) => {
-//         console.error("Error fetching match schedules:", error);
-//         alert("An error occurred while fetching match schedules.");
-//       });
-//   });
-// });
 
 
 
@@ -203,56 +138,42 @@ async function postData(url = "", data = {}) {
 
 
         // // Fetch all matched - from API in index.js POST method
-        // let email = JSON.parse(localStorage.getItem("user"))?.email
-    const matchScheduleButton = document.getElementById("matchschedule");
-    
-    let noteContainer = document.querySelector(".mynotes");
-    noteContainer.innerHTML = " "
-    const matches = postData("/matchschedules", { email: user.email }); // Sending POST req to API to fetch match
+  // Get the match schedule button element
+let matchScheduleButton = document.getElementById("matchschedule"); //get the element by giving its id
+submit.addEventListener("click", async () => {
+// Add a click event listener to the button
 
-  // Populate the notes
-  matches.then((matches) => {
-    console.log("Matches", matches.nomatchestes);
+  // Make a GET request to your API to fetch all match schedules
+  let resp = await postData("/matchschedules", {team1 , team2 , date , venue}); //Go to the endpoint with this data
+  fetch("/matchschedules")
+  if (resp.success){
+    noteContainer.innerHTML = "";
 
-    // let noteContainer = document.querySelector(".mynotes");
-    matches.matches.forEach((element) => {
-      let match = `
-        <div class="card mx-2" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">${element.team1}</h5>
-                <h5 class="card-title">${element.team2}</h5>
-                <h5 class="card-title">${element.date}</h5>
-                <h5 class="card-title">${element.venue}</h5>
-            </div>
-        </div>`;
-        //  <a href="#" class="card-link" onclick="deleteNote('${element.title}')">Delete</a>
-      noteContainer.innerHTML += match;
-    });
+// Check if there are matches
+if (matches && matches.length > 0) {
+  // Iterate through the matches and display them
+  matches.forEach((element) => {
+    let match = `
+      <div class="card mx-2" style="width: 18rem;">
+          <div class="card-body">
+              <h5 class="card-title">${element.team1}</h5>
+              <h5 class="card-title">${element.team2}</h5>
+              <h5 class="card-title">${element.date}</h5>
+              <h5 class="card-title">${element.venue}</h5>
+          </div>
+      </div>`;
+    noteContainer.innerHTML += match;
   });
+} 
+else {
+  // If there are no matches, you can display a message
+  noteContainer.innerHTML = "No match schedules available.";
+}
+}
+});
 
+  
 
-
-// fetchnotes()
-
-
-        // Adding a note
-        let submit = document.getElementById("submit") //get the element by giving its id
-        submit.addEventListener("click",async()=>{
-            let title = document.getElementById("title").value
-            let desc = document.getElementById("desc").value
-            let email = JSON.parse(localStorage.getItem("user"))?.email
-            console.log("Submitting this data:", title , desc , email) 
-            // console.log(title)
-            let resp = await postData("/addnote", { title,desc, email });
-            console.log(resp)
-            if (resp.success) {
-          alert("Note Created!");
-          document.getElementById("title").value = ""; //Making the title and desc areas blank after Creating a note
-          document.getElementById("desc").value = "";
-          // fetchnotes( )
-        }
-
-        })
     </script>
 
   </body>

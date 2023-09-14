@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SignUp</title>
+    <title>SignUp | WorkIndia Task - Notes</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -15,7 +15,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <!-- NavBar Title -->
-        <a class="navbar-brand" href="/">WorkIndia</a>
+        <a class="navbar-brand" href="/">WorkIndiaNotes</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -60,40 +60,26 @@
       </div>
     </nav>
     <div class="container">
-      <h1 class="my-3">SignUp Page</h1>
+      <h1 class="my-3">Add player to Squad</h1>
 
       <!-- SignUp form with email and password -->
+      <!-- Add player to Squad form -->
       <div>
         <div class="mb-3">
+          <label for="teamname" class="form-label">Team Name</label>
+          <input type="text" class="form-control" id="teamname" />
+        </div>
+        <div class="mb-3">
           <label for="name" class="form-label">Name</label>
-          <input
-            type="name"
-            class="form-control"
-            id="name"
-            aria-describedby="emailHelp"
-          />
+          <input type="text" class="form-control" id="name" />
         </div>
-
         <div class="mb-3">
-          <label for="email" class="form-label">Email Address</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            aria-describedby="emailHelp"
-          />
-          <div id="emailHelp" class="form-text">
-            We'll never share your email with anyone else.
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <textarea type="text" class="form-control" id="password"></textarea>
+          <label for="role" class="form-label">Role</label>
+          <input type="text" class="form-control" id="role" />
         </div>
         <!-- Submit Button -->
         <button id="submit" type="submit" class="btn btn-primary">
-          Sign Up
+          Submit
         </button>
       </div>
     </div>
@@ -121,15 +107,17 @@
 
       let submit = document.getElementById("submit"); //get the element by giving its id
       submit.addEventListener("click", async () => {
-        let email = document.getElementById("email").value;
-        let password = document.getElementById("password").value;
-        console.log("Submitting this data", email, password);
-        let resp = await postData("/signup", { email, password }); //Go to the endpoint with this data
+        let teamname = document.getElementById("teamname").value;
+        let name = document.getElementById("name").value;
+        let role = document.getElementById("role").value;
+        console.log("Submitting this data", teamname, name, role);
+        let resp = await postData("/addplayer", { teamname, name, role }); //Go to the endpoint with this data
         console.log(resp);
         if (resp.success) {
-          alert("User Created! You can now login.");
-          document.getElementById("email").value = ""; //Making the Email and Password areas blank after Creating a user
-          document.getElementById("password").value = "";
+          alert("Player Created!.");
+          document.getElementById("teamname").value = ""; //Making the Email and Password areas blank after Creating a user
+          document.getElementById("name").value = "";
+          document.getElementById("role").value = "";
         }
       });
     </script>
