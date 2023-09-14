@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SignUp | WorkIndia Task - Notes</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <!-- NavBar Title -->
+        <a class="navbar-brand" href="/">WorkIndiaNotes</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <!-- Home -->
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
+          </ul>
+          <div class="d-flex" role="search">
+            <!-- <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              /> -->
+            <!-- Login and SignUp buttons -->
+            <a href="/login"
+              ><button class="btn btn-outline-success mx-2" type="submit">
+                Login
+              </button></a
+            >
+            <a href="/signup"
+              ><button class="btn btn-outline-success mx-2" type="submit">
+                SignUp
+              </button></a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <h1 class="my-3">SignUp Page</h1>
+
+      <!-- SignUp form with email and password -->
+      <div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input
+            type="name"
+            class="form-control"
+            id="name"
+            aria-describedby="emailHelp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            aria-describedby="emailHelp"
+          />
+          <div id="emailHelp" class="form-text">
+            We'll never share your email with anyone else.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <textarea type="text" class="form-control" id="password"></textarea>
+        </div>
+        <!-- Submit Button -->
+        <button id="submit" type="submit" class="btn btn-primary">
+          Sign Up
+        </button>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // Example POST method implementation:
+      async function postData(url = "", data = {}) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        let rdata = await response.json();
+        return rdata;
+      }
+
+      let submit = document.getElementById("submit"); //get the element by giving its id
+      submit.addEventListener("click", async () => {
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        console.log("Submitting this data", email, password);
+        let resp = await postData("/signup", { email, password }); //Go to the endpoint with this data
+        console.log(resp);
+        if (resp.success) {
+          alert("User Created! You can now login.");
+          document.getElementById("email").value = ""; //Making the Email and Password areas blank after Creating a user
+          document.getElementById("password").value = "";
+        }
+      });
+    </script>
+  </body>
+</html>

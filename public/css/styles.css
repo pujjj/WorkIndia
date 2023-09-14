@@ -1,0 +1,12 @@
+/* Add styling for the userNameContainer and userName */
+#userNameContainer {
+  display: flex;
+  align-items: center; /* Vertically center the content */
+  margin-right: 10px; /* Add margin between the buttons and the user name */
+}
+
+#userName {
+  display: none;
+  font-weight: bold; /* Apply a bold font to the user's name */
+  color: #333; /* Set the text color */
+}
