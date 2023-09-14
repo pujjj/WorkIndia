@@ -1,22 +1,38 @@
 # WorkIndia Task
 Hey there, Mr. X. You have been appointed to design a platform like Cricbuzz, wherein guest users can come on the platform and browse across multiple matches and can see either of them in detail.
 There is a Role Based Access provision and 2 types of users would exist :
-1. Admin - can perform all operations like adding matches, players in the teams, updating stats and scores, etc.
-2. Guest - can only view matches and their details.
+* Admin - can perform all operations like adding matches, players in the teams, updating stats and scores, etc.
+* Guest - can only view matches and their details.
 
 ## Tech Stack:
-Web server: NodeJS
+Web server: NodeJS , ExpressJS , Mongoosejs , MongoDB
 
 ## Requirements
-1. Register Admin
-2. Login User
-3. Create Match
-4. Get Match Schedules
-5. Get Match Details
-6. Add a Team Member to a Squad
-7. Get Player Statistics
+* Register Admin
+* Login User
+* Create Match
+* Get Match Schedules
+* Get Match Details
+* Add a Team Member to a Squad
+* Get Player Statistics
 
-### UI:
+## Project Schema
+* models: Database models (Admin.js , User.js...)
+* pages: Contains the HTML files for different pages
+* index.js: Handles HTTP requests (GET , POST)
+
+
+## Deployment
+
+To deploy this project run
+
+```bash
+  npm start
+```
+
+
+
+## Overview:
 ![Screenshot 2023-09-14 at 12 40 11 PM](https://github.com/pujjj/WorkIndia/assets/97466150/034aa58f-f427-4e0f-8f2b-7a9fea943b8b)
 
 ### MongoDB Tables:
